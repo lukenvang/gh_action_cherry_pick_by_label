@@ -39,7 +39,7 @@ jobs:
                 for PR_NUMBER in $PR_NUMBERS; do
                     COMMITS=$(gh pr view $PR_NUMBER --json commits --jq '.commits[].oid')
                     for COMMIT in $COMMITS; do
-                        git cherry-pick $COMMIT || git cherry-pick --continue
+                        git cherry-pick $COMMIT -m "Cherry-picked commit $COMMIT from PR #$PR_NUMBER" || git cherry-pick --continue
                     done
                 done
 
