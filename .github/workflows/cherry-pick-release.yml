@@ -22,8 +22,8 @@ jobs:
             - name: Cherry Pick Commits into Release Branch
               run: | 
                 # Define variables
-                LABEL="${{ github.event.inputs.cherry-pick-label }}"
-                TARGET_BRANCH="${{ github.event.inputs.release }}"
+                LABEL="${{ inputs.cherry-pick-label }}"
+                TARGET_BRANCH="${{ inputs.release }}"
 
                 # Fetch closed PR numbers with the specified label
                 PR_NUMBERS=$(gh pr list --state closed --label "$LABEL" --json number | jq -r '.[].number')
