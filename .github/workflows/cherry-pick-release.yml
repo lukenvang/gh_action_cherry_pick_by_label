@@ -22,6 +22,8 @@ jobs:
             - name: Cherry Pick Commits into Release Branch
               run: | 
                 git fetch
+                git config --global user.email "lukenvang@gmail.com"
+                git config --global user.name "Luke Vang"
                 # Define variables
                 LABEL="${{ inputs.cherry-pick-label }}"
                 TARGET_BRANCH="${{ inputs.release }}"
