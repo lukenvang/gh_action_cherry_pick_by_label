@@ -24,6 +24,7 @@ jobs:
                 git fetch
                 git config --global user.email "lukenvang@gmail.com"
                 git config --global user.name "Luke Vang"
+                git commit --allow-empty
                 # Define variables
                 LABEL="${{ inputs.cherry-pick-label }}"
                 TARGET_BRANCH="${{ inputs.release }}"
