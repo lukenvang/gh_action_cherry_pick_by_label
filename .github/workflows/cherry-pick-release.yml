@@ -21,6 +21,7 @@ jobs:
                 fetch-depth: 0
             - name: Cherry Pick Commits into Release Branch
               run: | 
+                git fetch
                 # Define variables
                 LABEL="${{ inputs.cherry-pick-label }}"
                 TARGET_BRANCH="${{ inputs.release }}"
