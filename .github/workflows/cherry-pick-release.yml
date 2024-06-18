@@ -1,0 +1,41 @@
+name: Cherry Pick release
+on: 
+    workflow_dispatch:
+        inputs:
+            release:
+                description: 'Release branch name'
+                required: true
+            cherry-pick-label: 
+                description: 'Label to cherry pick'
+                required: true
+                default: 'cherry-pick'
+jobs:  
+    build-release:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
+            - name: Cherry Pick Commits into Release Branch
+              run: | 
+                # Define variables
+                LABEL="${{ github.event.inputs.cherry-pick-label }}"
+                TARGET_BRANCH="${{ github.event.inputs.release }}"
+
+                # Fetch closed PR numbers with the specified label
+                PR_NUMBERS=$(gh pr list --state closed --label "$LABEL" --json number | jq -r '.[].number')
+
+                # Checkout the target branch
+                git checkout $TARGET_BRANCH
+
+                # Fetch commits from each PR and cherry-pick them
+                for PR_NUMBER in $PR_NUMBERS; do
+                    COMMITS=$(gh pr view $PR_NUMBER --json commits --jq '.commits[].oid')
+                    for COMMIT in $COMMITS; do
+                        git cherry-pick $COMMIT || git cherry-pick --continue
+                    done
+                done
+
+                # Push the changes to the remote branch
+                git push origin $TARGET_BRANCH
